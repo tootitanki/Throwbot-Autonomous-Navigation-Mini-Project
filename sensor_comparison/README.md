@@ -23,12 +23,12 @@ This is a simulation study of modelled sensors with configured properties. It is
 ## Results (v2, 72 trials, 0 excluded)
 All 72 goals reported SUCCEEDED. No aborts, no timeouts. Goal success is not the same as clean avoidance.
 
-| condition | n | logged gap <= 1 cm | logged gap <= 5 cm | median detect lag (sim s) | mean tracking recall | mean phantom cells | sensor rate (sim Hz) | RTF (median) |
-|---|---|---|---|---|---|---|---|---|
-| lidar | 18 | 11 | 12 | 0.23 | 0.61 | 13 | 10.0 | 0.99 |
-| lidar_fwd87 | 18 | 11 | 11 | 0.22 | 0.82 | 30 | 10.0 | 0.99 |
-| depth160 | 18 | 18 | 18 | 0.12 | 0.64 | 51 | 15.15 | 0.99 |
-| ultrasonic | 18 | 13 | 14 | 0.28 | 0.64 | 0.3 | 10.0 | 0.99 |
+| condition | n | logged gap <= 1 cm | logged gap <= 5 cm | median detect lag (sim s) | mean tracking recall | mean phantom cells |
+|---|---|---|---|---|---|---|
+| lidar | 18 | 11 | 12 | 0.23 | 0.61 | 13 |
+| lidar_fwd87 | 18 | 11 | 11 | 0.22 | 0.82 | 30 |
+| depth160 | 18 | 18 | 18 | 0.12 | 0.64 | 51 |
+| ultrasonic | 18 | 13 | 14 | 0.28 | 0.64 | 0.3 |
 
 Per-speed tables: `analysis/table_by_sensor_speed.csv`; all trials: `analysis/summary_all.csv`; raw rows: `results_v2/summary.jsonl`. Wall-clock rates are in the tables too; sim-clock and wall-clock metrics are kept separate.
 
@@ -54,7 +54,7 @@ Real Gazebo GUI + RViz screen captures (Xvfb, ffmpeg), one per condition, 0.5 m/
 
 ## How to read the tables and figures
 - `succeeded_gap_gt_1cm` and `succeeded_gap_le_1cm_logged` split the 72 SUCCEEDED goals by the logged minimum body-box gap. They do not mean "reached" versus "failed": every goal succeeded.
-- Tables give medians or means as named in each column (detect lag and gap: median; tracking recall and phantom cells: mean; rates and RTF: median over trials). Per-speed rows have n = 6.
+- Tables give medians or means as named in each column (detect lag and gap: median; tracking recall and phantom cells: mean). Per-speed rows have n = 6.
 - In the figures, lines are the median over 6 seeds at each speed and the dots are the individual trials. Small samples; the lines do not show that one sensor is better. The tracking-recall figure uses the median per speed, the table uses the mean over all 18 trials, so they are not the same statistic.
 
 ## Reproducing (needs setup, not copy-and-run)

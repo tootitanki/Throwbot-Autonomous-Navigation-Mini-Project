@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <world name="test_room">
+    <physics name="1ms" type="ignored"><max_step_size>0.004</max_step_size><real_time_factor>1.0</real_time_factor></physics>
+    <plugin filename="ignition-gazebo-physics-system" name="ignition::gazebo::systems::Physics"/>
+    <plugin filename="ignition-gazebo-user-commands-system" name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system" name="ignition::gazebo::systems::SceneBroadcaster"/>
+    <plugin filename="ignition-gazebo-sensors-system" name="ignition::gazebo::systems::Sensors"><render_engine>ogre2</render_engine></plugin>
+    <light type="directional" name="sun"><cast_shadows>false</cast_shadows><pose>0 0 10 0 0 0</pose><diffuse>0.9 0.9 0.9 1</diffuse><direction>-0.3 0.2 -1</direction></light>
+
+    <model name="ground"><static>true</static><link name="l">
+      <collision name="c"><geometry><plane><normal>0 0 1</normal><size>20 16</size></plane></geometry></collision>
+      <visual name="v"><geometry><plane><normal>0 0 1</normal><size>20 16</size></plane></geometry><material><ambient>0.7 0.7 0.7 1</ambient><diffuse>0.7 0.7 0.7 1</diffuse></material></visual>
+    </link></model>
+
+    <!-- Room 12 x 8 m. World origin = room centre. -->
+    <model name="walls"><static>true</static>
+      <link name="n"><pose>0 4.05 0.5 0 0 0</pose><collision name="c"><geometry><box><size>12.2 0.1 1</size></box></geometry></collision><visual name="v"><geometry><box><size>12.2 0.1 1</size></box></geometry></visual></link>
+      <link name="s"><pose>0 -4.05 0.5 0 0 0</pose><collision name="c"><geometry><box><size>12.2 0.1 1</size></box></geometry></collision><visual name="v"><geometry><box><size>12.2 0.1 1</size></box></geometry></visual></link>
+      <link name="e"><pose>6.05 0 0.5 0 0 0</pose><collision name="c"><geometry><box><size>0.1 8 1</size></box></geometry></collision><visual name="v"><geometry><box><size>0.1 8 1</size></box></geometry></visual></link>
+      <link name="w"><pose>-6.05 0 0.5 0 0 0</pose><collision name="c"><geometry><box><size>0.1 8 1</size></box></geometry></collision><visual name="v"><geometry><box><size>0.1 8 1</size></box></geometry></visual></link>
+    </model>
+
+    <!-- Fixed boxes -->
+    <model name="box_a"><static>true</static><pose>-2.5 1.5 0.5 0 0 0</pose><link name="l">
+      <collision name="c"><geometry><box><size>1 1 1</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>1 1 1</size></box></geometry><material><ambient>0.8 0.3 0.2 1</ambient><diffuse>0.8 0.3 0.2 1</diffuse></material></visual></link></model>
+    <model name="box_b"><static>true</static><pose>-1.0 -2.0 0.5 0 0 0</pose><link name="l">
+      <collision name="c"><geometry><box><size>1.2 0.8 1</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>1.2 0.8 1</size></box></geometry><material><ambient>0.8 0.3 0.2 1</ambient><diffuse>0.8 0.3 0.2 1</diffuse></material></visual></link></model>
+    <model name="box_c"><static>true</static><pose>3.0 2.0 0.5 0 0 0</pose><link name="l">
+      <collision name="c"><geometry><box><size>1 1.5 1</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>1 1.5 1</size></box></geometry><material><ambient>0.8 0.3 0.2 1</ambient><diffuse>0.8 0.3 0.2 1</diffuse></material></visual></link></model>
+    <model name="box_d"><static>true</static><pose>3.0 -2.5 0.5 0 0 0</pose><link name="l">
+      <collision name="c"><geometry><box><size>1.5 1 1</size></box></geometry></collision>
+      <visual name="v"><geometry><box><size>1.5 1 1</size></box></geometry><material><ambient>0.8 0.3 0.2 1</ambient><diffuse>0.8 0.3 0.2 1</diffuse></material></visual></link></model>
+
+    <!-- Moving obstacle: 0.5 m box on a prismatic joint along Y, crossing the start->goal route at x = 0.5.
+         Driven by obstacle_mover (starts when robot is 2.5 m into its run, then ping-pong between y=-3 and y=+3, 0.5 m/s). -->
+    <model name="crossing_obstacle"><pose>0.5 0 0 0 0 0</pose>
+      <link name="rail"><pose>0 0 0.05 0 0 0</pose><inertial><mass>1000</mass></inertial></link>
+      <link name="mover"><pose>0 -3 0.5 0 0 0</pose>
+        <inertial><mass>10</mass><inertia><ixx>1</ixx><iyy>1</iyy><izz>1</izz></inertia></inertial>
+        <collision name="c"><geometry><box><size>0.5 0.5 1</size></box></geometry></collision>
+        <visual name="v"><geometry><box><size>0.5 0.5 1</size></box></geometry><material><ambient>0.9 0.1 0.1 1</ambient><diffuse>0.9 0.1 0.1 1</diffuse></material></visual>
+      </link>
+      <joint name="world_fix" type="fixed"><parent>world</parent><child>rail</child></joint>
+      <joint name="slide" type="prismatic"><parent>rail</parent><child>mover</child>
+        <axis><xyz>0 1 0</xyz><limit><lower>-0.1</lower><upper>6.1</upper><effort>1000</effort><velocity>2</velocity></limit></axis></joint>
+      <plugin filename="ignition-gazebo-joint-controller-system" name="ignition::gazebo::systems::JointController">
+        <joint_name>slide</joint_name><use_force_commands>false</use_force_commands><topic>obstacle/cmd_vel</topic>
+      </plugin>
+      <plugin filename="ignition-gazebo-joint-state-publisher-system" name="ignition::gazebo::systems::JointStatePublisher"><topic>obstacle/joint_state</topic></plugin>
+    </model>
+  </world>
+</sdf>

@@ -91,15 +91,5 @@ for metric, name, yl in [("min_clearance_m", "fig_clearance.png", "min logged bo
     ax.set_title("Lines: median over 6 seeds per speed. Dots: individual trials.\nSmall samples, not a ranking.", fontsize=9)
     ax.legend(fontsize=7); fig.tight_layout(); fig.savefig(f"{out}/{name}", dpi=130); plt.close(fig)
 
-# 3 rates
-fig, ax = plt.subplots(figsize=(7, 4))
-w = 0.27
-x = np.arange(len(order))
-ax.bar(x - w, [clean[clean.sensor == s].sensor_rate_sim_hz.median() for s in order], w, label="sensor Hz (sim clock)")
-ax.bar(x, [clean[clean.sensor == s].costmap_rate_sim_hz.median() for s in order], w, label="costmap Hz (sim clock)")
-ax.bar(x + w, [clean[clean.sensor == s].real_time_factor.median() * 10 for s in order], w, label="real-time factor x10")
-ax.set_xticks(x); ax.set_xticklabels(order); ax.legend(fontsize=8)
-ax.set_title("Achieved rates (software rendering, 2 cores)")
-fig.tight_layout(); fig.savefig(f"{out}/fig_rates.png", dpi=130); plt.close(fig)
 print(t1.round(3).to_string())
 print("contaminated:", int(df.contaminated.sum()), "of", len(df))

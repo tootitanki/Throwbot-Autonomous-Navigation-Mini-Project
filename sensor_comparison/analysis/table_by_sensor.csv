@@ -1,0 +1,5 @@
+sensor,n,succeeded_gap_gt_1cm,succeeded_gap_le_1cm_logged,aborted,timeout,logged_gap_le_1cm,logged_gap_le_5cm,min_clear_med_m,detect_lag_med_s,detect_gap_med_m,tracking_recall_mean,phantom_mean,sensor_hz_sim,sensor_hz_wall,costmap_hz_sim,rtf_med
+lidar,18.0,7.0,11.0,0.0,0.0,11.0,12.0,0.0,0.225,0.74,0.614,13.028,10.015,9.94,2.52,0.991
+lidar_fwd87,18.0,7.0,11.0,0.0,0.0,11.0,11.0,0.0,0.22,0.765,0.82,30.083,10.005,9.93,2.52,0.992
+depth160,18.0,0.0,18.0,0.0,0.0,18.0,18.0,0.0,0.12,0.735,0.638,51.333,15.15,15.015,2.535,0.991
+ultrasonic,18.0,5.0,13.0,0.0,0.0,13.0,14.0,0.0,0.28,0.265,0.636,0.322,10.01,9.92,2.58,0.991
